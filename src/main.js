@@ -27,7 +27,7 @@ Vue.prototype.$isLogin = () => {
   if (isLogin != true) { // 检查是否登陆
     router.push({path: '/user'})
   } else {
-    console.log("userId:", lstore.userId())
+   // console.log("userId:", lstore.userId())
   }
 }
 

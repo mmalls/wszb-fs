@@ -3,11 +3,13 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const home = (resolve) => {
-  import('@/components/index/index').then((module) => {
-    resolve(module)
-  })
-} 
+const home = () => import('@/components/index/index') 
+const user = () => import('@/components/user/login')
+const custom_list = () => import('@/components/custom/list')
+const custom_add = () => import('@/components/custom/add')
+const channel_list = () => import('@/components/channel/list')
+const goods_list = () => import('@/components/order/list')
+const order_lsit = () => import('@/components/goods/list')
 
 const router = new Router({
   routes: [
@@ -22,27 +24,31 @@ const router = new Router({
     },
     { 
       path: '/user',
-      component: resolve => import('@/components/user/login').then(module =>resolve(module))
+      component: user
     }, 
     { 
       path: '/customs/list',
-      component: resolve => import('@/components/custom/list').then(module =>resolve(module))
+      component: custom_list
     },
     { 
       path: '/customs/add',
-      component: resolve => import('@/components/custom/add').then(module =>resolve(module))
+      component: custom_add
+    },
+    { 
+      path: '/customs/edit/:id',
+      component: custom_add
     },
     { 
       path: '/orders/list',
-      component: resolve => import('@/components/order/list').then(module =>resolve(module))
+      component: order_lsit
     },
     { 
       path: '/goods/list',
-      component: resolve => import('@/components/goods/list').then(module =>resolve(module))
+      component: goods_list
     },
     { 
       path: '/channels/list',
-      component: resolve => import('@/components/channel/list').then(module =>resolve(module))
+      component: channel_list
     }
   ]
 })

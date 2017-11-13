@@ -1,14 +1,16 @@
 <template>
   <div id="app" style="height:100%;">
-    <loading :show="isLoading()" position="absolute"></loading>
+    <loading :show="isLoading" position="absolute"></loading>
     <view-box ref="view-box">
       <!--header slot-->
       <div class="vux-demo-header-box" slot="header">
-        <x-header :left-options="leftOptions" :transition="headerTransition" :title="title" @on-click-title="scrollTop">
+        <x-header :left-options="leftOptions" :transition="headerTransition" :title="title">
           <router-link slot="right" :to="addLink.url" v-show="addLink.show">新增</router-link>
         </x-header>
       </div>
-      <router-view :transition="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')"></router-view>
+      
+      <router-view :transition="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" slot="default" style="padding-top:46px;padding-bottom:46px;"></router-view>
+      
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" slot="bottom">
           <tabbar-item selected link="/"> 
               <i slot="icon" class="fa fa-home" ></i>
@@ -67,39 +69,38 @@ export default {
     }
   },
   methods: {
-    ...mapGetters(['isLoading', 'direction']),
-    scrollTop () {
-      this.$refs.viewBox.$els.viewBoxBody.scrollTop = 0
-    }
   },
  computed: {
+   ...mapGetters(['isLoading', 'direction']),
     leftOptions () {
       return {
         showBack: this.$route.path !== '/' && this.$route.path !== '/user'
       }
     },
     headerTransition () {
-      return this.direction() === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
+      return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
     },
     title () {
       let rp = this.$route.path
-      if (rp == '/user') return '用户'
-      if (rp == '/customs/list') {
+      if (rp && rp.startsWith('/user')) {
+        return '用户'
+      } 
+      if (rp && rp.startsWith('/customs')) {
         this.addLink.show = true
         this.addLink.url =  '/customs/add'
         return '客户'
       }
-      if (rp == '/channels/list') {
+      if (rp && rp.startsWith('/channels')) {
         this.addLink.show = true
         this.addLink.url =  '/channels/add'
         return '渠道'
       }
-      if (rp == '/goods/list') {
+      if (rp && rp.startsWith('/goods')) {
         this.addLink.show = true
         this.addLink.url =  '/goods/add'
         return '商品'
       }
-      if (rp == '/orders/list') {
+      if (rp && rp.startsWith('/orders/list')) {
         this.addLink.show = true
         this.addLink.url =  '/orders/add'
         return '订单'

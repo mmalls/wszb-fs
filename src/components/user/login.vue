@@ -1,5 +1,5 @@
 <template>
-  <div class="user">
+  <div id="user">
     <tab>
      <tab-item selected @on-item-click="onItemClick">登陆</tab-item>
       <tab-item @on-item-click="onItemClick">注册</tab-item>
