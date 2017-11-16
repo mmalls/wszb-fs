@@ -1,13 +1,14 @@
 <template>
-  <div class="custome_list">
+  <div class="custom_add">
     <group title="录入客户信息">
       <x-input title="微信号" name="weixin" v-model="custom.weixin" placeholder="请输入微信号" :required="true"></x-input>
       <x-input title="手机号码" v-model="custom.phone" placeholder="请输入手机号" :required="true"  keyboard="number" is-type="china-mobile" :readonly="readonly"></x-input>
-      <x-textarea :max="200" title="送货地址" v-model="custom.address"  name="address" placeholder="请输入送货地址" :required="true"></x-textarea>
+      <x-input title="收货人" name="receiver" v-model="custom.receiver" placeholder="请输入收货人" :required="true"></x-input>
+      <x-textarea :max="200" title="收货地址" v-model="custom.address"  name="address" placeholder="请输入收货地址" :required="true"></x-textarea>
       <x-input title="邮编" v-model="custom.postcode"  name="postcode" keyboard="number" placeholder="请输入邮"></x-input>
       <box gap="10px 10px">
         <x-button type="primary" @click.native="doEdit" v-if="edit">更新</x-button>
-        <x-button type="primary" @click.native="doSave">保存</x-button>
+        <x-button type="primary" @click.native="doSave" v-else >保存</x-button>
       </box>
     </group>
    <toast v-model="toast.show" :type="toast.type" :time="800" is-show-mask  position="middle">{{ toast.msg }}</toast>
@@ -15,10 +16,11 @@
 </template>
 
 <script>
-
 import { XInput, XTextarea, Group, XButton, Cell, Box, Toast } from 'vux'
+import xtoast from '@/components/mixins/xtoast.js'
 
 export default {
+  mixins: [xtoast],
   components: {
     XInput, XTextarea, XButton,
     Group, Box, Toast
@@ -28,14 +30,10 @@ export default {
       customId: "",
       readonly: false,
       edit: false,
-      toast: {
-        show: false,
-        msg: "",
-        type: "warn"
-      },
       custom: {
         weixin: "",
         phone: "",
+        receiver: "",
         address: "",
         postcode: ""
       }
@@ -44,13 +42,9 @@ export default {
   props: {},
   watch: {},
   methods: {
-    showToast(show, msg) {
-      this.toast.show = show
-      this.toast.msg = msg
-    },
     checkInput() {
-        if (this.custom.weixin == "" ||this.custom.mobile == ""||this.custom.address == "") {
-          this.showToast(true, "请输入完整信息")
+        if (this.custom.weixin == "" || this.custom.phone == "" ||this.custom.address == "") {
+          this.showToast("warn", "请输入完整信息")
           return false
         }
         return true
@@ -75,7 +69,7 @@ export default {
         //console.log("get custom, ", this.custom)
         this.readonly = true
       }).catch(e => {
-        this.showToast(true, "查询信息失败")
+        this.showToast("warn", "查询信息失败")
         router.push({path: '/customs/list'})
       })
     },

@@ -16,15 +16,21 @@ var axios_i = axios.create({
   timeout: 1000, 
   withCredentials: true
 })
-if (lstore.isLogin()) {
-   axios.headers= {'Authorization': 'Bearer ' + lstore.token()}
-}
+axios_i.interceptors.request.use(config => {
+  if (lstore.isLogin()) {
+    config.headers.Authorization = 'Bearer ' + lstore.token()
+  }
+  return config
+}, err => {
+  return Promise.reject(err)
+})
+
 Vue.prototype.$rest = axios_i
 Vue.prototype.$lstore = lstore
 Vue.prototype.$isLogin = () => {
   let isLogin = lstore.isLogin()
   /*console.log("isLogin :" , isLogin)*/
-  if (isLogin != true) { // 检查是否登陆
+  if (!isLogin) { // 检查是否登陆
     router.push({path: '/user'})
   } else {
    // console.log("userId:", lstore.userId())

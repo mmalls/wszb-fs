@@ -80,7 +80,7 @@ let store = {
         return true
       }catch (e) {
         this.cleanUserInfo()
-        console.log("verify :" , e)
+        //console.log("verify :" , e)
         return false
       }
     }

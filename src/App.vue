@@ -82,6 +82,7 @@ export default {
     },
     title () {
       let rp = this.$route.path
+      this.addLink.show = false
       if (rp && rp.startsWith('/user')) {
         return '用户'
       } 
