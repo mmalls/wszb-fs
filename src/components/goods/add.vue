@@ -24,25 +24,22 @@
         <x-button type="primary" @click.native="doSave" v-else >保存</x-button>
       </box>
     </group>
-   <toast v-model="toast.show" :type="toast.type" :time="800" is-show-mask  position="middle">{{ toast.msg }}</toast>
   </div>
 </template>
 
 <script>
 import {
   XInput, XTextarea, Group, Cell, PopupRadio,
-  XButton, Box, Toast, Flexbox,
-  FlexboxItem, Checker, CheckerItem
+  XButton, Box, Flexbox, FlexboxItem, Checker, CheckerItem
 } from "vux"
-import xtoast from '@/components/mixins/xtoast.js'
+import xprompt from '@/components/mixins/xprompt.js'
 import xlist from '@/components/mixins/xlist.js'
 
 export default {
-  mixins: [xtoast, xlist],
+  mixins: [xprompt, xlist],
   components: {
     XInput, XTextarea, XButton, PopupRadio,
-    Cell, Group, Box, Toast,
-    Flexbox, FlexboxItem, Checker, CheckerItem
+    Cell, Group, Box, Flexbox, FlexboxItem, Checker, CheckerItem
   },
   data() {
     return {

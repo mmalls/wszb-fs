@@ -8,11 +8,15 @@ import Bars from 'vuebars'
 import App from './App'
 import router from './router'
 import lstore from '@/assets/js/store'
+import  { ToastPlugin } from 'vux'
+import  { ConfirmPlugin } from 'vux'
 
 Vue.config.productionTip = false
 FastClick.attach(document.body)
 
 Vue.use(Bars)
+Vue.use(ToastPlugin)
+Vue.use(ConfirmPlugin)
 
 var axios_i = axios.create({
   baseURL: '/rest/v1',

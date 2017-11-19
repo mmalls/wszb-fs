@@ -4,26 +4,17 @@
       <form-preview header-label="微信号" :header-value="c.weixin" :body-items="c.list" :footer-buttons="c.btn"></form-preview>
         <br/>
     </div>
-    <toast v-model="toast.show" :type="toast.type" :time="800" is-show-mask  position="middle">{{ toast.msg }}</toast>
-    <div>
-      <confirm v-model="delcnf.show"
-      title="操作提示"
-      content="确认删除？删除之后不可恢复哦！"
-      @on-confirm="doDelete">
-      </confirm>
-    </div>
   </div>
 </template>
 
 <script>
-import {FormPreview, Toast, Confirm} from 'vux'
-import xdelcnf from '@/components/mixins/xdelcnf.js'
-import xtoast from '@/components/mixins/xtoast.js'
+import {FormPreview} from 'vux'
+import xprompt from '@/components/mixins/xprompt.js'
 
 export default {
-  mixins: [xdelcnf, xtoast],
+  mixins: [xprompt],
   components: {
-    FormPreview, Toast, Confirm
+    FormPreview
   },
   data () {
     return {
@@ -76,7 +67,7 @@ export default {
     },
     doDelete(id) {
       //console.log("delete custom: ", id)
-      let url = "/users/"+ this.$lstore.userId() + "/customs/" + this.delcnf.id
+      let url = "/users/"+ this.$lstore.userId() + "/customs/" + id
       this.$rest.delete(url).then(res=>{
         this.showToast("success", "删除客户信息成功")
         this.listCustoms()

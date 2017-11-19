@@ -17,22 +17,19 @@
       <x-input title="密码确认" v-model="signupInfo.password2" type="password" placeholder="请确认输入密码" :equal-with="signupInfo.password"></x-input>
       <x-button type="primary" @click.native="doSignup">注册</x-button>
     </group>
-    <toast v-model="toast.show" :type="toast.type" :time="800" is-show-mask  position="middle">{{ toast.msg }}</toast>
-
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Group, XInput, Toast, XButton } from 'vux'
-import xtoast from '@/components/mixins/xtoast.js'
+import { Tab, TabItem, Group, XInput, XButton } from 'vux'
+import xprompt from '@/components/mixins/xprompt.js'
 
 export default {
-  mixins:[xtoast],
+  mixins:[xprompt],
   components: {
     Tab,
     TabItem,
-    Group, 
-    Toast,
+    Group,
     XInput,
     XButton
   },

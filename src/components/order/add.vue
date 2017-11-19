@@ -39,7 +39,7 @@
              <x-input title="手机号码" v-model="order.custom.phone" placeholder="选择客户自动关联" :required="true"  readonly ></x-input>
             <x-input title="收货人" v-model="order.custom.receiver" placeholder="选择客户自动关联" :required="true" readonly ></x-input>
             <x-textarea :max="100" title="收货地址" v-model="order.custom.address"  placeholder="选择客户自动关联" :required="true" readonly ></x-textarea>
-            <x-input title="邮编" v-model="order.custom.postcode" keyboard="number" placeholder="选择客户自动关联" readonly></x-input>
+            <x-input title="邮编" v-model="order.custom.postCode" keyboard="number" placeholder="选择客户自动关联" readonly></x-input>
         </group>
         <box gap="10px 10px">
             <x-button type="primary" @click.native="doEdit" v-if="edit">更新</x-button>
@@ -49,16 +49,16 @@
 </template>
 
 <script>
-import { XInput, Selector, XTextarea, Group, Cell, XButton, Box, Toast, InlineXNumber,PopupRadio, Flexbox, FlexboxItem} from 'vux'
-import xtoast from '@/components/mixins/xtoast.js'
+import { XInput, Selector, XTextarea, Group, Cell, XButton, Box, InlineXNumber, PopupRadio, Flexbox, FlexboxItem} from 'vux'
+import xprompt from '@/components/mixins/xprompt.js'
 import xlist from '@/components/mixins/xlist.js'
 
 
 export default {
-  mixins: [xtoast, xlist],
+  mixins: [xprompt, xlist],
   components: {
     XInput, XTextarea, XButton, Selector, Flexbox, FlexboxItem,
-    Group, Cell, Box, Toast, InlineXNumber, PopupRadio
+    Group, Cell, Box, InlineXNumber, PopupRadio
   },
   data () {
     return {
@@ -84,7 +84,7 @@ export default {
             phone:"", 
             receiver:"", 
             address:"", 
-            postcode:""
+            postCode:""
         }
       }
     }

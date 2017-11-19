@@ -4,28 +4,17 @@
       <form-preview header-label="进货渠道" :header-value="c.name" :body-items="c.list" :footer-buttons="c.btn"></form-preview>
         <br/>
     </div>
-    <toast v-model="toast.show" :type="toast.type" :time="800" is-show-mask  position="middle">{{ toast.msg }}</toast>
-    <div>
-      <confirm v-model="delcnf.show"
-      title="操作提示"
-      content="确认删除？删除之后不可恢复哦！"
-      @on-confirm="doDelete">
-      </confirm>
-    </div>
   </div>
 </template>
 
 <script>
-import {FormPreview, Group, Toast, Confirm} from 'vux'
-import xdelcnf from '@/components/mixins/xdelcnf.js'
-import xtoast from '@/components/mixins/xtoast.js'
+import {FormPreview} from 'vux'
+import xprompt from '@/components/mixins/xprompt.js'
 
 export default {
-  mixins: [xdelcnf, xtoast],
+  mixins: [xprompt],
   components: {
-    FormPreview,
-    Toast,
-    Confirm
+    FormPreview
   },
   data () {
     return {
@@ -74,9 +63,9 @@ export default {
           this.showToast("warn", "获取渠道商列表失败")
         })
     },
-    doDelete() {
+    doDelete(id) {
       //console.log("delete channel: ", id)
-      let url = "/users/"+ this.$lstore.userId() + "/channels/" + this.delcnf.id
+      let url = "/users/"+ this.$lstore.userId() + "/channels/" + id
       this.$rest.delete(url).then(res=>{
         this.showToast("success", "删除渠道商信息成功")
         this.listChannels()
