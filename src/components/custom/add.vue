@@ -5,7 +5,7 @@
       <x-input title="手机号码" v-model="custom.phone" placeholder="请输入手机号" :required="true"  keyboard="number" is-type="china-mobile" :readonly="readonly"></x-input>
       <x-input title="收货人" name="receiver" v-model="custom.receiver" placeholder="请输入收货人" :required="true"></x-input>
       <x-textarea :max="200" title="收货地址" v-model="custom.address"  name="address" placeholder="请输入收货地址" :required="true"></x-textarea>
-      <x-input title="邮编" v-model="custom.postcode"  name="postcode" keyboard="number" placeholder="请输入邮"></x-input>
+      <x-input title="邮编" v-model="custom.postcode"  name="postcode" keyboard="number" placeholder="请输入邮编"></x-input>
       <box gap="10px 10px">
         <x-button type="primary" @click.native="doEdit" v-if="edit">更新</x-button>
         <x-button type="primary" @click.native="doSave" v-else >保存</x-button>
@@ -70,7 +70,7 @@ export default {
         this.readonly = true
       }).catch(e => {
         this.showToast("warn", "查询信息失败")
-        router.push({path: '/customs/list'})
+         this.$router.push({path: '/customs/list'})
       })
     },
     doEdit() {

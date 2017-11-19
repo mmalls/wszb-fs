@@ -11,7 +11,8 @@ const channel_list = () => import('@/components/channel/list')
 const channel_add = () => import('@/components/channel/add')
 const goods_list = () => import('@/components/goods/list')
 const goods_add = () => import('@/components/goods/add')
-const order_lsit = () => import('@/components/order/list')
+const order_list = () => import('@/components/order/list')
+const order_add = () => import('@/components/order/add')
 
 const router = new Router({
   routes: [
@@ -36,7 +37,13 @@ const router = new Router({
       component: custom_add
     },{ 
       path: '/orders/list',
-      component: order_lsit
+      component: order_list
+    },{ 
+      path: '/orders/add',
+      component: order_add
+    },{ 
+      path: '/orders/edit/:id',
+      component: order_add
     },{ 
       path: '/goods/list',
       component: goods_list

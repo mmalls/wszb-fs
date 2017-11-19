@@ -1,8 +1,37 @@
 <template>
   <div class="order_list">
-    <div v-for="c in orders" :key="c.id" >
-      <form-preview header-label="单笔收入" :header-value="c.earning" :body-items="c.list" :footer-buttons="c.btn"></form-preview>
-        <br/>
+    <div v-for="(c, idx) in orders" :key="c.id" >
+      <group>
+        <cell title="单笔收入" :value="c.earning"></cell>
+        <div v-for="(g, idx) in c.goods" :key="g.id" >
+          <cell :title="'商品：' + (idx +1)" is-link :border-intent="false"
+                :arrow-direction="g.show ? 'up' : 'down'"
+                @click.native="g.show = !g.show">         
+          </cell>
+          <template v-if="g.show">
+            <cell-form-preview :list="g.list" v-if="c.custom.show"></cell-form-preview>
+          </template>
+        </div>
+        <cell title="客户信息" is-link :border-intent="false"
+                :arrow-direction="c.custom.show ? 'up' : 'down'"
+                @click.native="c.custom.show = !c.custom.show">         
+        </cell>
+        <template v-if="c.custom.show">
+          <cell-form-preview :list="c.custom.list" v-if="c.custom.show"></cell-form-preview>
+        </template>
+        <box gap="10px 10px">
+        <flexbox>
+          <flexbox-item style="text-align:center">
+            <x-button plain @click.native="doEdit('/orders/edit/', c.id)">修改</x-button>
+          </flexbox-item>
+          <flexbox-item style="text-align:center"> 
+            <x-button plain @click.native="cnfDelete(c.id)" class="custom-primary-red">删除</x-button>
+          </flexbox-item>
+        </flexbox> 
+        </box>     
+      </group>
+
+      <br/>
     </div>
     <toast v-model="toast.show" :type="toast.type" :time="800" is-show-mask  position="middle">{{ toast.msg }}</toast>
     <div>
@@ -16,14 +45,16 @@
 </template>
 
 <script>
-import {FormPreview, Toast, Confirm} from 'vux'
+import {FormPreview, Toast, Confirm, Cell, Group, Box, 
+ CellFormPreview, Flexbox, FlexboxItem, XButton } from 'vux'
 import xdelcnf from '@/components/mixins/xdelcnf.js'
 import xtoast from '@/components/mixins/xtoast.js'
 
 export default {
   mixins: [xdelcnf, xtoast],
   components: {
-    FormPreview, Toast, Confirm
+    FormPreview, Toast, Confirm, Cell, Group, Box,
+    CellFormPreview, Flexbox, FlexboxItem, XButton
   },
   data () {
     return {
@@ -38,40 +69,42 @@ export default {
       let url = "/users/"+ this.$lstore.userId() + "/orders"
       this.$rest.get(url).then(res => {
            //console.log("get orders res, ", res.data)
-           let cs = []
+           let out = []
            res.data.orders.forEach( (it) => {
-              let c = {}
+              let ogoods = []
+              let oitem = {}
+              let purchasePrice = 0 
+              
+              for (let c of it.goods) {
+                let item = {}
+                item.show = true
+                item.list = [
+                  {label:'商品名称', value: c.goodsName},
+                  {label:'单位售价', value: '￥' + c.sellPrice.toFixed(2)},
+                  {label:'单位进价', value: '￥' + c.purchasePrice.toFixed(2)},
+                  {label:'购买数量', value: c.quantity}
+                ]
+                purchasePrice += c.purchasePrice*c.quantity
+                ogoods.push(item)
+              }
+              oitem.goods = ogoods
               //console.log("get orders it, ", it)
-              c['earning'] = ((it.sellPrice - it.purchasePrice) * it.quantity).toFixed(2)
-              c['id'] = it.id
-              let list = [
-                {label:'客户微信号', value: it.customWeixin},
-                {label:'客户手机号', value: it.customPhone},
-                {label:'商品名称', value: it.goodsName},
-                {label:'成交价', value: it.sellPrice},
-                {label:'进价', value: it.purchasePrice},
-                {label:'购买数量', value: it.quantity},
-                {label:'成交日期', value: it.createdAt},
-                //{label:'折扣类型', value: it.discountType},
-                //{label:'折扣数', value: it.discount}
-              ]
-              let btn = [{
-                style: 'primary',
-                text: '修改',
-                onButtonClick: (name) => _t.doEdit('/orders/edit/', it.id)
-              }, {
-                style: 'warn',
-                text: '删除',
-                onButtonClick: (name) => _t.cnfDelete(it.id)
-              }]
-              c['list'] = list
-              c['btn'] = btn
-              cs.push(c)
+              oitem.earning = '￥' + (it.totalSellPrice - purchasePrice).toFixed(2)
+              oitem.id = it.id
+              oitem.custom = {
+                show: true, 
+                list: [
+                  {label:'客户微信号', value: it.custom.weixin},
+                  {label:'客户手机号', value: it.custom.phone},
+                  {label:'成交日期', value: it.createdAt}
+                ]
+              }
+              out.push(oitem)
            })
-           this.orders = cs
+           this.orders = out
            //console.log("orders, ", this.orders)
         }).catch(e => {
-          //console.log("get orders failed, ", e)
+          console.log("get orders failed, ", e)
           this.showToast("warn", "获取订单列表失败")
         })
     },
@@ -80,7 +113,7 @@ export default {
       let url = "/users/"+ this.$lstore.userId() + "/orders/" + this.delcnf.id
       this.$rest.delete(url).then(res=>{
         this.showToast("success", "删除订单信息成功")
-        this.listorders()
+        this.listOrders()
       }).catch(e => {
         this.showToast("warn", "删除订单信息失败")
       }) 
@@ -97,6 +130,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less">
+.custom-primary-red {
+  border-color: #CE3C39!important;
+  color: #CE3C39!important;
+  &:active {
+    border-color: rgba(206, 60, 57, 0.6)!important;
+    color: rgba(206, 60, 57, 0.6)!important;
+    background-color: transparent;
+  }
+}
 </style>

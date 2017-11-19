@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import {FormPreview, Toast} from 'vux'
+import {FormPreview, Toast, Confirm} from 'vux'
 import xdelcnf from '@/components/mixins/xdelcnf.js'
 import xtoast from '@/components/mixins/xtoast.js'
 
 export default {
   mixins: [xdelcnf, xtoast],
   components: {
-    FormPreview, Toast
+    FormPreview, Toast, Confirm
   },
   data () {
     return {
@@ -45,18 +45,23 @@ export default {
               c['name'] = it.name
               c['id'] = it.id
               let list = [
-                {label:'卖价', value: it.sellPrice},
-                {label:'进价', value: it.purchasePrice},
+                {label:'卖价', value: '￥' + it.sellPrice.toFixed(2)},
+                {label:'进价', value: '￥' + it.purchasePrice.toFixed(2)},
                 {label:'种类', value: it.catalog},
+                {label:'单位', value: it.unit},
                 {label:'说明', value: it.intro},
                 {label:'进货渠道', value: it.channelName}
               ]
               let btn = [{
                 style: 'primary',
+                text: '下单',
+                onButtonClick: (name) => {this.$router.push({path: '/orders/add?goodsId=' + it.id})}
+              }, {
+                style: 'default',
                 text: '修改',
                 onButtonClick: (name) => _t.doEdit('/goods/edit/', it.id)
               }, {
-                style: 'warn',
+                style: 'default',
                 text: '删除',
                 onButtonClick: (name) => _t.cnfDelete(it.id)
               }]

@@ -3,13 +3,16 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import axios from 'axios'
-import 'font-awesome/css/font-awesome.css'
+import Bars from 'vuebars'
+//import 'font-awesome/css/font-awesome.css'
 import App from './App'
 import router from './router'
 import lstore from '@/assets/js/store'
 
 Vue.config.productionTip = false
 FastClick.attach(document.body)
+
+Vue.use(Bars)
 
 var axios_i = axios.create({
   baseURL: '/rest/v1',

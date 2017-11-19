@@ -52,10 +52,14 @@ export default {
               ]
               let btn = [{
                 style: 'primary',
+                text: '进货',
+                onButtonClick: (name) => {this.$router.push({path: '/goods/add?channelId=' + it.id})}
+              }, {
+                style: 'default',
                 text: '修改',
                 onButtonClick: (name) => _t.doEdit('/channels/edit/', it.id)
               }, {
-                style: 'warn',
+                style: 'default',
                 text: '删除',
                 onButtonClick: (name) => _t.cnfDelete(it.id)
               }]
@@ -83,10 +87,13 @@ export default {
   },
   filters: {},
   computed: {},
-  created () {},
+  created () {
+     this.$isLogin()
+     this.listChannels()
+  },
   mounted () {
-    this.$isLogin()
-    this.listChannels()
+   
+    
   },
   destroyed () {}
 }

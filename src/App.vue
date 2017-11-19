@@ -1,6 +1,8 @@
 <template>
   <div id="app" style="height:100%;">
+    <!--
     <loading :show="isLoading" position="absolute"></loading>
+    -->
     <view-box ref="view-box">
       <!--header slot-->
       <div class="vux-demo-header-box" slot="header">
@@ -118,7 +120,7 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/index.less';
-@import '~vux/src/styles/reset.less';
+// @import '~vux/src/styles/reset.less';
 
 html, body {
   height: 100%;

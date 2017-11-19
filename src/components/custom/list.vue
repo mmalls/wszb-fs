@@ -52,10 +52,14 @@ export default {
               ]
               let btn = [{
                 style: 'primary',
+                text: '下单',
+                onButtonClick: (name) => {this.$router.push({path: '/orders/add?customId=' + it.id})}
+              }, {
+                style: 'default',
                 text: '修改',
                 onButtonClick: (name) => _t.doEdit('/customs/edit/', it.id)
               }, {
-                style: 'warn',
+                style: 'default',
                 text: '删除',
                 onButtonClick: (name) => _t.cnfDelete(it.id)
               }]
